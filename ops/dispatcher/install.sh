@@ -149,7 +149,7 @@ echo ""
 echo "==> Installation complete."
 echo ""
 echo "==> systemctl status superdev-dispatcher.timer:"
-systemctl status superdev-dispatcher.timer 2>&1 || true
+systemctl status superdev-dispatcher.timer --no-pager 2>&1 | tail -8 || true
 echo ""
 echo "==> Next scheduled execution:"
 systemctl list-timers superdev-dispatcher.timer 2>&1 || true
