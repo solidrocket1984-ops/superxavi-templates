@@ -78,6 +78,7 @@ Todas las variables son opcionales; los valores por defecto son los mostrados.
 | `AUTO_MERGE_MAX_UPDATE_ATTEMPTS` | `2` | `auto-merge-pr-v2.sh` | Máximo de llamadas a `gh pr update-branch` por PR. |
 | `AUTO_MERGE_UPDATE_GRACE` | `300` | `auto-merge-pr-v2.sh` | Segundos extra añadidos al timeout tras un `update-branch` exitoso. |
 | `AUTO_MERGE_GH_RETRY_SLEEP` | `5` | `auto-merge-pr-v2.sh` | Pausa (segundos) antes del reintento en errores 5xx de GitHub. |
+| `HEARTBEAT_KEY` | _(ninguno)_ | `dispatch-queue-v2.sh` | Clave opcional para el heartbeat del ciclo del dispatcher. Si se define, se envía un ping al endpoint de healthcheck en cada iteración exitosa. |
 
 ---
 
