@@ -1,0 +1,133 @@
+# =============================================================================
+# PLANTILLA PIEL: CLÍNICA DENTAL — Motor LIA
+# =============================================================================
+# sector_code : clinica
+# preset      : lia_demo_clinica
+# motor       : LIA (RespondeYA)
+# versión     : 1.0
+#
+# Uso: copiar este archivo, rellenar todos los campos marcados con << >>,
+# y aplicar al workspace según el README de esta misma carpeta.
+# =============================================================================
+
+_meta:
+  sector_code: clinica
+  behavior_preset: lia_demo_clinica
+  motor: LIA
+  version: "1.0"
+
+# ---------------------------------------------------------------------------
+# IDENTIDAD DEL NEGOCIO
+# ---------------------------------------------------------------------------
+company_name: "<<NOMBRE_CLINICA>>"          # nombre legal o comercial
+
+# ---------------------------------------------------------------------------
+# FICHA voice_context_kb  (estructura análoga a la ficha hotel)
+# Se almacena en client_workspaces.metadata.voice_context_kb
+# ---------------------------------------------------------------------------
+voice_context_kb:
+
+  # — Datos básicos —
+  clinic_name: "<<NOMBRE_CLINICA>>"          # p.ej. "Clínica Dental Rigo"
+  address: "<<CALLE, Nº, CP, CIUDAD>>"       # p.ej. "C/ Mayor 12, 28001 Madrid"
+  phone: "<<TELEFONO_PRINCIPAL>>"            # p.ej. "+34 910 000 000"
+
+  # — Tono y comunicación —
+  tono: formal           # formal | neutro | cercano
+  idiomas:
+    - es
+    # - en
+    # - ca
+    # - fr
+
+  # — Horario de apertura —
+  # Texto libre, conciso para que LIA lo reproduzca en voz o chat.
+  clinic_hours: "<<HORARIO>>"
+  # Ejemplos:
+  #   "Lunes a viernes de 9:00 a 20:00, sábados de 10:00 a 14:00, festivos cerrado"
+  #   "L-V 9-21h, S 9-14h"
+
+  # — Tratamientos —
+  # Lista de tratamientos que LIA puede mencionar. Uno por línea.
+  # LIA NO inventará tratamientos fuera de esta lista.
+  treatments_list: |
+    <<TRATAMIENTO_1>>
+    <<TRATAMIENTO_2>>
+    <<TRATAMIENTO_3>>
+  # Sugerencias habituales en clínica dental:
+  #   Ortodoncia (brackets metálicos, zafiro y alineadores invisibles)
+  #   Implantes dentales
+  #   Estética dental y blanqueamiento
+  #   Endodoncia (tratamiento de conductos)
+  #   Periodoncia (tratamiento de encías)
+  #   Odontopediatría (niños)
+  #   Prótesis dental (fija y removible)
+  #   Urgencias dentales
+
+  # — Parking / acceso —
+  parking:
+    disponible: false        # true | false
+    detalle: "<<DETALLE>>"
+    # Ejemplos:
+    #   "Parking público en C/ Ejemplo a 100m"
+    #   "Amplia zona de aparcamiento gratuito junto a la clínica"
+    #   "Sin parking propio; metro L3 a 2 minutos (parada Ejemplo)"
+
+  # — Urgencias —
+  urgencias:
+    telefono: "<<TELEFONO_URGENCIAS_O_null>>"
+    # null si se gestiona por el mismo número principal
+    horario: "<<HORARIO_ATENCION_URGENCIAS>>"
+    # p.ej. "L-V 9:00-20:00 para pacientes; fuera de horario llamar al 112"
+    instrucciones: "<<INSTRUCCIONES_URGENCIA>>"
+    # p.ej. "Para hemorragia o traumatismo grave acuda a Urgencias o llame al 112"
+
+  # — Escalado a humano —
+  # LIA transfiere o toma nota para que el equipo llame cuando se cumple
+  # alguno de estos criterios.
+  escalado_a_humano:
+    criterios:
+      - "Paciente solicita expresamente hablar con una persona"
+      - "Urgencia dental activa: dolor severo, traumatismo, hemorragia"
+      - "Queja formal, reclamación o situación de conflicto"
+      - "<<CRITERIO_ESPECIFICO>>"   # añadir los propios de esta clínica
+    horario_atencion_humana: "<<p.ej. L-V 9:00-20:00>>"
+
+  # — Bloque de cumplimiento (RGPD + IA) —
+  # Estos valores NO deben modificarse para garantizar el cumplimiento.
+  compliance:
+    agente_es_ia: true
+    # LIA se presenta siempre como "asistente virtual" / IA.
+    # Nunca se hace pasar por una persona física.
+
+    aviso_grabacion: true
+    # En canal voz, LIA incluye el aviso al inicio de la llamada:
+    # "Esta llamada puede grabarse y tratarse conforme al RGPD;
+    #  puede oponerse en cualquier momento."
+
+    rgpd:
+      datos_ue: true           # datos tratados exclusivamente en servidores UE
+      responsable: "<<NOMBRE_CLINICA>>"
+      finalidad: "Gestión de citas, consultas y atención al paciente"
+      contacto_dpo: "<<EMAIL_DPO_O_null>>"
+      # null si la clínica no tiene DPO designado (obligatorio >250 empleados
+      # o tratamiento masivo de datos de salud — consultar con asesor legal)
+
+# ---------------------------------------------------------------------------
+# CONFIGURACIÓN DEL ASISTENTE LIA
+# Se almacena en assistants.metadata (leído directamente por el motor)
+# ---------------------------------------------------------------------------
+assistants:
+  behavior_preset: lia_demo_clinica
+
+  metadata:
+    # Campos que el motor LIA renderiza en el system prompt:
+    clinic_name: "<<NOMBRE_CLINICA>>"     # igual que voice_context_kb.clinic_name
+    clinic_hours: "<<HORARIO>>"           # igual que voice_context_kb.clinic_hours
+    treatments_list: "<<TRATAMIENTOS_SEPARADOS_POR_COMA_O_SALTO_DE_LINEA>>"
+    # Versión inline del mismo listado, p.ej.:
+    #   "ortodoncia, implantes, estética dental, endodoncia, blanqueamiento"
+
+    voice_recording_disclosure: true
+    # true  → LIA añade el aviso RGPD al saludo en canal voz (recording_notice)
+    # false → sin aviso (solo si la clínica dispensa expresamente)
